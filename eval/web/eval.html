@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- 評価専用ページ。dist-eval/ にだけ出力し、GitHub Pages（dist/）には載せない -->
+    <meta name="robots" content="noindex" />
+    <title>Gemma 4 文字起こし 評価</title>
+    <script type="module" src="./eval.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Gemma 4 文字起こし 評価</h1>
+      <p>結果は window.__eval に入ります（eval/gemma4_eval/run_browser.py が読み取ります）。</p>
+      <p id="status" role="status">準備中…</p>
+    </main>
+  </body>
+</html>

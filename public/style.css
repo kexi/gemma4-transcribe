@@ -149,3 +149,487 @@ audio {
   white-space: pre-wrap;
   font-size: 16px;
 }
+
+/* ---- ベンチマークページ（benchmarks.html）。すべて .bench-page / .bench-* に閉じ、デモのページには効かせない ---- */
+
+/*
+ * 系列色は検証済み参照パレットの slot 1–4（light は #fff、dark は #20201f の面に対して検証済み）。
+ * モデルへの割り当ては src/benchmarks/format.ts の seriesSlot（MODELS の順で固定）。
+ * 黄・緑は light 面で 3:1 未満なので、棒には必ず値ラベルを付け、表も併記する
+ */
+.bench-page {
+  --bench-series-1: #2a78d6;
+  --bench-series-2: #eb6834;
+  --bench-series-3: #1baf7a;
+  --bench-series-4: #eda100;
+  /* slot を使い切ったモデル用の中立色（色を生成して足さない） */
+  --bench-series-other: #8a8a84;
+  --bench-grid: #ecece8;
+  --bench-axis: #c4c4be;
+  --bench-tooltip-bg: #1d1d1b;
+  --bench-tooltip-fg: #f7f7f5;
+  --bench-error-bg: #fbeceb;
+}
+
+/* デモの style.css は prefers-color-scheme だけで切り替えるので、data-theme での明示指定はこのページの中だけで扱う */
+:root[data-theme='light'] .bench-page {
+  color-scheme: light;
+  --bg: #f7f7f5;
+  --fg: #1d1d1b;
+  --muted: #6b6b66;
+  --card: #ffffff;
+  --line: #dcdcd6;
+  --accent: #2f6fde;
+  --danger: #c8372d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .bench-page {
+    --bench-series-1: #3987e5;
+    --bench-series-2: #d95926;
+    --bench-series-3: #199e70;
+    --bench-series-4: #c98500;
+    --bench-series-other: #7a7a74;
+    --bench-grid: #2c2c2a;
+    --bench-axis: #4a4a47;
+    --bench-tooltip-bg: #ececea;
+    --bench-tooltip-fg: #161615;
+    --bench-error-bg: #3a201e;
+  }
+}
+
+:root[data-theme='dark'] .bench-page {
+  color-scheme: dark;
+  --bg: #161615;
+  --fg: #ececea;
+  --muted: #9a9a94;
+  --card: #20201f;
+  --line: #353533;
+  --accent: #6b9cf5;
+  --danger: #f06a5f;
+  --bench-series-1: #3987e5;
+  --bench-series-2: #d95926;
+  --bench-series-3: #199e70;
+  --bench-series-4: #c98500;
+  --bench-series-other: #7a7a74;
+  --bench-grid: #2c2c2a;
+  --bench-axis: #4a4a47;
+  --bench-tooltip-bg: #ececea;
+  --bench-tooltip-fg: #161615;
+  --bench-error-bg: #3a201e;
+}
+
+.bench-page main {
+  max-width: 1080px;
+}
+
+.bench-page a {
+  color: var(--accent);
+}
+
+.bench-nav {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.bench-headline {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.55;
+  margin: 12px 0 16px;
+  text-wrap: pretty;
+}
+
+.bench-error,
+.bench-empty {
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+
+.bench-error {
+  background: var(--bench-error-bg);
+  border: 1px solid var(--danger);
+}
+
+.bench-error ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  font-size: 13px;
+}
+
+.bench-empty {
+  background: var(--card);
+  border: 1px dashed var(--line);
+}
+
+.bench-empty p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.bench-section h2 {
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+
+.bench-section h3 {
+  font-size: 14px;
+  margin: 16px 0 4px;
+}
+
+.bench-note {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.bench-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 13px;
+}
+
+.bench-legend li {
+  display: inline-flex;
+  align-items: center;
+}
+
+.bench-swatch {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: baseline;
+  background: var(--bench-series-other);
+}
+
+.bench-swatch.bench-series-1,
+.bench-tooltip-key.bench-series-1 {
+  background: var(--bench-series-1);
+}
+.bench-swatch.bench-series-2,
+.bench-tooltip-key.bench-series-2 {
+  background: var(--bench-series-2);
+}
+.bench-swatch.bench-series-3,
+.bench-tooltip-key.bench-series-3 {
+  background: var(--bench-series-3);
+}
+.bench-swatch.bench-series-4,
+.bench-tooltip-key.bench-series-4 {
+  background: var(--bench-series-4);
+}
+
+.bench-multiples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 20px 28px;
+}
+
+.bench-chart {
+  margin: 0;
+  min-width: 0;
+}
+
+.bench-chart figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  margin-bottom: 6px;
+}
+
+.bench-chart-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.bench-chart-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.bench-chart-plot {
+  width: 100%;
+  min-width: 0;
+}
+
+.bench-chart-svg {
+  display: block;
+  overflow: visible;
+  font-size: 12px;
+}
+
+.bench-grid line {
+  stroke: var(--bench-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.bench-grid line.bench-baseline {
+  stroke: var(--bench-axis);
+}
+
+.bench-axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-row-label {
+  fill: var(--fg);
+}
+
+.bench-value-label {
+  fill: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-value-label.is-missing {
+  fill: var(--muted);
+}
+
+.bench-value-note {
+  fill: var(--danger);
+}
+
+.bench-hit {
+  fill: transparent;
+}
+
+.bench-bar {
+  fill: var(--bench-series-other);
+  transition: filter 0.12s;
+}
+.bench-bar.bench-series-1 {
+  fill: var(--bench-series-1);
+}
+.bench-bar.bench-series-2 {
+  fill: var(--bench-series-2);
+}
+.bench-bar.bench-series-3 {
+  fill: var(--bench-series-3);
+}
+.bench-bar.bench-series-4 {
+  fill: var(--bench-series-4);
+}
+
+.bench-bar-row {
+  outline: none;
+}
+
+.bench-bar-row:hover .bench-bar,
+.bench-bar-row:focus-visible .bench-bar {
+  filter: brightness(1.12) saturate(1.05);
+}
+
+.bench-bar-row:hover .bench-hit,
+.bench-bar-row:focus-visible .bench-hit {
+  fill: var(--bench-grid);
+  fill-opacity: 0.5;
+}
+
+.bench-bar-row:focus-visible .bench-row-label {
+  text-decoration: underline;
+}
+
+.bench-tooltip {
+  position: fixed;
+  z-index: 10;
+  max-width: min(320px, calc(100vw - 8px));
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bench-tooltip-bg);
+  color: var(--bench-tooltip-fg);
+  font-size: 12px;
+  line-height: 1.45;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+}
+
+.bench-tooltip[hidden] {
+  display: none;
+}
+
+.bench-tooltip-value {
+  display: block;
+  font-size: 15px;
+}
+
+.bench-tooltip-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ツールチップでは塗りの箱ではなく短い線で系列を示す */
+.bench-tooltip-key {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--bench-series-other);
+}
+
+.bench-tooltip-details {
+  opacity: 0.8;
+}
+
+.bench-table-scroll {
+  /* position: relative は、表の中の視覚的に隠した文字（position: absolute）がスクロール枠の外に出てページ全体を横に広げないようにするため */
+  position: relative;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* 狭い画面で表を横にスクロールしても、どの行のモデルかが見えるようにモデル列を固定する */
+.bench-table thead th:first-child,
+.bench-table tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--card);
+}
+
+.bench-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+.bench-table caption {
+  text-align: left;
+  color: var(--muted);
+  font-size: 12px;
+  padding-bottom: 6px;
+}
+
+.bench-table th,
+.bench-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.bench-table thead th {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+  vertical-align: bottom;
+  /* 「総合 厳密」が「総合 厳 / 密」のように語の途中で折れないよう、空白でだけ折り返す */
+  word-break: keep-all;
+}
+
+.bench-table thead th:first-child {
+  text-align: left;
+  min-width: 0;
+}
+
+.bench-table tbody th {
+  text-align: left;
+  font-weight: 500;
+  min-width: 11em;
+}
+
+.bench-table td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bench-table td.bench-text-cell,
+.bench-table thead th.bench-text-cell {
+  text-align: left;
+}
+
+.bench-table td.bench-ids {
+  text-align: left;
+  white-space: normal;
+  min-width: 14em;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.bench-table tr.bench-overall-row td {
+  font-weight: 600;
+}
+
+.bench-model-note {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.bench-best {
+  font-weight: 700;
+}
+
+.bench-warning {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.bench-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.bench-dl {
+  display: grid;
+  grid-template-columns: minmax(7em, max-content) 1fr;
+  gap: 6px 16px;
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.bench-dl dt {
+  font-weight: 600;
+}
+
+.bench-dl dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.bench-notes {
+  margin: 4px 0 0;
+  padding-left: 20px;
+  font-size: 13px;
+}
+
+@media (max-width: 560px) {
+  .bench-table caption::after {
+    content: '（横にスクロールできます）';
+  }
+
+  .bench-dl {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .bench-dl dd {
+    margin-bottom: 8px;
+  }
+}
+
+/* 内訳表はモデルごとに tbody を分けているので、モデルの境目を少し太い線で区切る */
+.bench-table tbody + tbody {
+  border-top: 2px solid var(--line);
+}

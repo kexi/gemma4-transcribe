@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Gemma 4（E2B / E4B）をブラウザ内（WebGPU）で動かしたときの日本語音声認識の精度（CER）と速度の比較"
+    />
+    <title>Gemma 4 文字起こし ベンチマーク</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./benchmarks.js"></script>
+  </head>
+  <body class="bench-page">
+    <main>
+      <nav class="bench-nav"><a href="./">← デモに戻る</a></nav>
+      <h1>ベンチマーク</h1>
+      <p class="lead">
+        公開データセットの日本語音声を、デモと同じ推論経路（Chrome + WebGPU、同じ
+        Worker）で文字起こしした精度と速度です。 数値はすべて評価ハーネスの集計結果から表示しています。
+      </p>
+
+      <p id="bench-headline" class="bench-headline" aria-live="polite">結果を読み込んでいます…</p>
+      <div id="bench-error" class="bench-error" role="alert" hidden></div>
+      <div id="bench-content" class="bench-content" hidden></div>
+
+      <noscript><p class="bench-error">このページの表示には JavaScript が必要です。</p></noscript>
+
+      <footer>
+        <a href="./">デモ</a>
+        ·
+        <a href="https://github.com/kexi/gemma4-transcribe">Source</a>
+      </footer>
+    </main>
+  </body>
+</html>

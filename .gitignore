@@ -5,3 +5,20 @@ result-*
 node_modules/
 dist/
 .pnpm-store/
+dist-eval/
+
+# Evaluation harness: audio, reference text and transcripts are never
+# redistributed (see README "評価"). Only the numeric aggregates are committed:
+# eval/results/<run_id>.md, eval/results/<run_id>.json and eval/results/latest.json
+# (the benchmark page reads the JSON). raw/ holds the per-clip text, so it stays
+# ignored as a whole; *.tmp are score.py's half-written files.
+eval/data/
+eval/results/raw/
+eval/results/*.tmp
+!eval/results/*.md
+!eval/results/*.json
+eval/.chrome-profile/
+eval/.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/

@@ -9,9 +9,11 @@ default:
 setup:
     lefthook install
 
-# Install JavaScript dependencies from the lockfile (pnpm is the only supported package manager).
+# This is the only recipe that fetches Python packages; `eval-test` (inside `check`) then runs offline.
+# Install JavaScript dependencies and the eval harness's Python venv, both strictly from their lockfiles.
 install:
     pnpm install --frozen-lockfile
+    uv sync --project eval --locked
 
 # Rebuild dist/ on every change; serve it with `just serve` in another terminal.
 dev:
@@ -67,5 +69,37 @@ pin:
 pin-check:
     pinact run -fix=false -no-api .github/workflows/*.yml
 
+# eval-run is left out on purpose: it needs a GPU and a real Chrome window.
 # Every gate a change has to clear. CI runs exactly this recipe.
-check: fmt-check justfile-lint actions-lint pin-check secrets typecheck lint test build
+check: fmt-check justfile-lint actions-lint pin-check secrets typecheck lint test eval-lint eval-test build
+
+# Lint and format-check the evaluation harness (Python) with ruff, without rewriting anything.
+eval-lint:
+    ruff check eval
+    ruff format --check eval
+
+# Run the evaluation harness unit tests (no network, no browser). Uses the venv `just install` synced; never re-locks.
+eval-test:
+    uv run --project eval --frozen --offline pytest eval/tests
+
+# Download the pinned datasets and write `per` clips per dataset (16 kHz mono wav) plus eval/data/manifest.json.
+eval-prepare per="100":
+    uv run --project eval --locked python -m gemma4_eval.prepare --per-dataset "{{ per }}"
+
+# Build the evaluation page into dist-eval/ (never deployed; dist/ stays untouched).
+eval-build:
+    pnpm exec tsdown -c tsdown.eval.config.ts
+
+# Every model in `models` runs in turn under one run_id. `run=<run_id>` resumes that existing run (YYYYMMDDTHHMMSSZ) with its recorded limit/offset.
+# Arguments are positional (`just eval-run e2b,e4b 10`) or name=value (`just eval-run models=e2b,e4b limit=10`).
+# Transcribe the manifest in a real Chrome window (WebGPU); writes eval/results/raw/<run_id>/.
+eval-run models="e2b" limit="" run="":
+    uv run --project eval --locked python -m gemma4_eval.run_browser --models "{{ models }}" --limit "{{ limit }}" --run-id "{{ run }}"
+
+# Aggregate every model of a run (the latest one when `run` is empty) into eval/results/<run_id>.{md,json} and latest.json.
+eval-score run="":
+    uv run --project eval --locked python -m gemma4_eval.score --run-id "{{ run }}"
+
+# Arguments are positional only here (`just eval e2b,e4b 100`): name=value would land in the wrong step.
+# Whole evaluation: prepare -> build -> run -> score.
+eval models="e2b" per="100": (eval-prepare per) eval-build (eval-run models) eval-score

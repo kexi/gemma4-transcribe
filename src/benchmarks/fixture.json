@@ -1,0 +1,300 @@
+{
+  "schema": 1,
+  "run_id": "20261004T120000Z",
+  "generated_at": "2026-10-04T12:42:10+00:00",
+  "git_commit": "6ccfadf46a87975d37372efcc9316cb2eaf5cf25",
+  "git_dirty": false,
+  "started_at": "2026-10-04T12:00:00+00:00",
+  "finished_at": "2026-10-04T12:41:55+00:00",
+  "language": "Japanese",
+  "environment": {
+    "chrome": "154.0.8037.97",
+    "platform": "macOS 26.1 (arm64)",
+    "gpu": "apple / metal-3",
+    "gpu_adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": ""
+    },
+    "machine": "Mac14,5 / Apple M2 Max"
+  },
+  "outlier_cer_norm_threshold": 1.0,
+  "datasets": [
+    {
+      "key": "jsut",
+      "label": "JSUT basic5000",
+      "repo": "japanese-asr/ja_asr.jsut_basic5000",
+      "revision": "278db379fc96167ff2293d7abf9ab86976afcd78",
+      "n": 100,
+      "excluded_over_30s": 0,
+      "total_audio_s": 452.6
+    },
+    {
+      "key": "reazon",
+      "label": "ReazonSpeech test",
+      "repo": "japanese-asr/ja_asr.reazonspeech_test",
+      "revision": "dd08bfb9dfc1cef4e4d0609fd78c3755d48b926f",
+      "n": 100,
+      "excluded_over_30s": 3,
+      "total_audio_s": 618.3
+    },
+    {
+      "key": "cv",
+      "label": "Common Voice 8.0",
+      "repo": "japanese-asr/ja_asr.common_voice_8_0",
+      "revision": "bf8819e8d9a5feb51b0c718686bd20ea67a3c729",
+      "n": 100,
+      "excluded_over_30s": 0,
+      "total_audio_s": 571.9
+    }
+  ],
+  "models": [
+    {
+      "key": "e2b",
+      "label": "Gemma 4 E2B（q4f16）",
+      "id": "onnx-community/gemma-4-E2B-it-ONNX",
+      "revision": "9f4bef82ea6e296bc69f8a2f5939f73af81b07a6",
+      "dtype": "q4f16",
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 6.8,
+      "first_load_s": 132.5,
+      "warmup_s": 2.1,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.214,
+          "cer_norm": 0.163,
+          "cer_reading": 0.081,
+          "rtf": 0.188,
+          "rtf_with_decode": 0.189128,
+          "audio_s": 452.6,
+          "cer_norm_median": 0.125,
+          "cer_norm_outliers": 0,
+          "cer_norm_excluding_outliers": 0.163
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.352,
+          "cer_norm": 0.318,
+          "cer_reading": 0.221,
+          "rtf": 0.131,
+          "rtf_with_decode": 0.131786,
+          "audio_s": 618.3,
+          "cer_norm_median": 0.214,
+          "cer_norm_outliers": 4,
+          "cer_norm_excluding_outliers": 0.262
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.198,
+          "cer_norm": 0.139,
+          "cer_reading": 0.062,
+          "rtf": 0.127,
+          "rtf_with_decode": 0.127762,
+          "audio_s": 571.9,
+          "cer_norm_median": 0.1,
+          "cer_norm_outliers": 1,
+          "cer_norm_excluding_outliers": 0.131
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 0.254,
+        "cer_norm": 0.205,
+        "cer_reading": 0.119,
+        "rtf": 0.145,
+        "rtf_with_decode": 0.14587,
+        "audio_s": 1642.8,
+        "cer_norm_median": 0.143,
+        "cer_norm_outliers": 5,
+        "cer_norm_excluding_outliers": 0.184
+      },
+      "worst_ids": {
+        "jsut": ["jsut-000405", "jsut-002202", "jsut-004333"],
+        "reazon": ["reazon-003315", "reazon-003858", "reazon-002273"],
+        "cv": ["cv-004410", "cv-003851", "cv-000431"]
+      },
+      "failed_ids": []
+    },
+    {
+      "key": "e2b-qat",
+      "label": "Gemma 4 E2B QAT mobile（q2f16）",
+      "id": "onnx-community/gemma-4-E2B-it-qat-mobile-ONNX",
+      "revision": "5cd5514efd375abf2801c856a3936b259cc00133",
+      "dtype": {
+        "audio_encoder": "q2f16",
+        "decoder_model_merged": "q2f16",
+        "embed_tokens": "q2f16",
+        "vision_encoder": "fp16"
+      },
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 5.2,
+      "first_load_s": 98.4,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.262,
+          "cer_norm": 0.207,
+          "cer_reading": 0.112,
+          "rtf": 0.121,
+          "rtf_with_decode": 0.121726,
+          "audio_s": 452.6,
+          "cer_norm_median": 0.167
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 2,
+          "cer_strict": 0.418,
+          "cer_norm": 0.383,
+          "cer_reading": 0.287,
+          "rtf": 0.109,
+          "rtf_with_decode": 0.109654,
+          "audio_s": 618.3,
+          "cer_norm_median": 0.25,
+          "cer_norm_outliers": 7,
+          "cer_norm_excluding_outliers": 0.301
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.241,
+          "cer_norm": 0.176,
+          "cer_reading": 0.089,
+          "rtf": 0.104,
+          "rtf_with_decode": 0.104624,
+          "audio_s": 571.9,
+          "cer_norm_median": 0.125,
+          "cer_norm_outliers": 2,
+          "cer_norm_excluding_outliers": 0.161
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 2,
+        "cer_strict": 0.307,
+        "cer_norm": 0.256,
+        "cer_reading": 0.163,
+        "rtf": 0.111,
+        "rtf_with_decode": 0.111666,
+        "audio_s": 1642.8,
+        "cer_norm_median": 0.176,
+        "cer_norm_outliers": 9,
+        "cer_norm_excluding_outliers": 0.214
+      },
+      "worst_ids": {
+        "jsut": ["jsut-001877", "jsut-000405"],
+        "reazon": ["reazon-003315", "reazon-000918", "reazon-004102"],
+        "cv": ["cv-004410", "cv-002215"]
+      },
+      "failed_ids": ["reazon-001044", "reazon-004871"]
+    },
+    {
+      "key": "e4b",
+      "label": "Gemma 4 E4B（q4f16）",
+      "id": "onnx-community/gemma-4-E4B-it-ONNX",
+      "revision": "843f250f23bc91754def1e0f0db390dacd1e6b05",
+      "dtype": "q4f16",
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 11.3,
+      "first_load_s": 241.7,
+      "warmup_s": 3.9,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.171,
+          "cer_norm": 0.118,
+          "cer_reading": 0.052,
+          "rtf": 0.296,
+          "rtf_with_decode": 0.297776,
+          "audio_s": 452.6,
+          "cer_norm_median": 0.083,
+          "cer_norm_outliers": 0,
+          "cer_norm_excluding_outliers": 0.118
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.297,
+          "cer_norm": 0.262,
+          "cer_reading": 0.174,
+          "rtf": 0.214,
+          "rtf_with_decode": 0.215284,
+          "audio_s": 618.3,
+          "cer_norm_median": 0.167,
+          "cer_norm_outliers": 2,
+          "cer_norm_excluding_outliers": 0.231
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.152,
+          "cer_norm": 0.097,
+          "cer_reading": 0.041,
+          "rtf": 0.205,
+          "rtf_with_decode": 0.20623,
+          "audio_s": 571.9,
+          "cer_norm_median": 0.063,
+          "cer_norm_outliers": 0,
+          "cer_norm_excluding_outliers": 0.097
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 0.207,
+        "cer_norm": 0.159,
+        "cer_reading": 0.089,
+        "rtf": 0.232,
+        "rtf_with_decode": 0.233392,
+        "audio_s": 1642.8,
+        "cer_norm_median": 0.1,
+        "cer_norm_outliers": 2,
+        "cer_norm_excluding_outliers": 0.147
+      },
+      "worst_ids": {
+        "jsut": ["jsut-000405"],
+        "reazon": ["reazon-003858", "reazon-001290"],
+        "cv": ["cv-003851"]
+      },
+      "failed_ids": []
+    },
+    {
+      "key": "e4b-qat",
+      "label": "Gemma 4 E4B QAT mobile（q2f16）",
+      "id": "onnx-community/gemma-4-E4B-it-qat-mobile-ONNX",
+      "revision": "4d18aa8b54e354bec4705e4a4894f5bbf8956c3d",
+      "dtype": {
+        "audio_encoder": "q2f16",
+        "decoder_model_merged": "q2f16",
+        "embed_tokens": "q2f16",
+        "vision_encoder": "fp16"
+      },
+      "status": null,
+      "planned": 300,
+      "missing": 300,
+      "load_s": null,
+      "first_load_s": null,
+      "per_dataset": {},
+      "overall": null,
+      "worst_ids": {},
+      "failed_ids": []
+    }
+  ],
+  "notes": [
+    "これは開発用のフィクスチャです（実測値ではありません）。",
+    "CER はクリップをまたいだマイクロ平均（総編集数 / 参照総文字数）。失敗したクリップは CER と RTF から除き、失敗数として別に示す。"
+  ]
+}

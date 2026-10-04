@@ -1,0 +1,50 @@
+[project]
+name = "gemma4-eval"
+version = "0.0.0"
+description = "Accuracy and speed evaluation harness for gemma4-transcribe (real Chrome + WebGPU)"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+  "fugashi",
+  "huggingface-hub",
+  "numpy",
+  "playwright",
+  "pyarrow",
+  "soundfile",
+  "soxr",
+  "unidic-lite",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "gemma4_eval"
+module-root = ""
+
+[tool.uv]
+# 公開から 1 日以上経った版だけを解決する（サプライチェーン対策。pnpm の minimumReleaseAge と同じ方針）
+exclude-newer = "2026-10-03T00:00:00Z"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+ignore = [
+  # 日本語のコメント・docstring は全角 1 文字を幅 2 と数えるため、コードより先に行長を超える。
+  # コードの行長は ruff format が揃えるので、lint では見ない
+  "E501",
+  # 全角の括弧・句読点は日本語の文として正しく、ASCII と取り違えたものではない
+  "RUF001",
+  "RUF002",
+  "RUF003",
+]

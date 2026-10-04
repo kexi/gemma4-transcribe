@@ -8,6 +8,7 @@
     "preinstall": "npx only-allow@1.2.2 pnpm",
     "dev": "tsdown --watch",
     "build": "tsdown",
+    "build:eval": "tsdown -c tsdown.eval.config.ts",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
     "test": "vitest run"
