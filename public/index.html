@@ -12,12 +12,18 @@
     <main>
       <h1>Gemma 4 文字起こし</h1>
       <p class="lead">
-        Gemma 4 E2B をブラウザの WebGPU で動かします。音声はこのタブの外に送られません。 初回は約 3.4GB
-        のモデルをダウンロードし、以降はブラウザのキャッシュから読み込みます。
+        Gemma 4（E2B / E4B）をブラウザの WebGPU で動かします。音声はこのタブの外に送られません。
+        初回はモデル（2.6〜5.2GB）をダウンロードし、以降はブラウザのキャッシュから読み込みます。
       </p>
 
       <section>
-        <button id="load" class="primary" type="button">モデルを読み込む</button>
+        <div class="controls">
+          <label
+            >モデル
+            <select id="model"></select
+          ></label>
+          <button id="load" class="primary" type="button">モデルを読み込む</button>
+        </div>
         <progress id="progress" max="100" value="0" hidden></progress>
         <p id="status" class="status" role="status">デスクトップ版の Chrome / Edge 推奨（WebGPU が必要）。</p>
       </section>
@@ -40,10 +46,7 @@
       </section>
 
       <footer>
-        <a
-          href="https://huggingface.co/onnx-community/gemma-4-E2B-it-ONNX/tree/9f4bef82ea6e296bc69f8a2f5939f73af81b07a6"
-          >onnx-community/gemma-4-E2B-it-ONNX</a
-        >
+        <a id="model-link" href="https://huggingface.co/onnx-community">onnx-community</a>
         ·
         <a href="https://github.com/kexi/gemma4-transcribe">Source</a>
       </footer>

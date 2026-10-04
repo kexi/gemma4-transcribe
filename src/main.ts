@@ -1,4 +1,5 @@
 import { decodeToMono16k, formatTimestamp, SAMPLING_RATE, splitIntoSegments, type AudioSegment } from './audio.ts';
+import { findModel, MODELS } from './models.ts';
 import { LANGUAGES } from './prompt.ts';
 import type { WorkerRequest, WorkerResponse } from './protocol.ts';
 
@@ -15,6 +16,8 @@ function mustGet<T extends HTMLElement>(id: string, type: new () => T): T {
   return element;
 }
 
+const modelSelect = mustGet('model', HTMLSelectElement);
+const modelLink = mustGet('model-link', HTMLAnchorElement);
 const loadButton = mustGet('load', HTMLButtonElement);
 const progressBar = mustGet('progress', HTMLProgressElement);
 const statusText = mustGet('status', HTMLParagraphElement);
@@ -26,6 +29,37 @@ const player = mustGet('player', HTMLAudioElement);
 const output = mustGet('output', HTMLDivElement);
 
 for (const { name, label } of LANGUAGES) languageSelect.add(new Option(label, name));
+for (const { key, label, approxGigabytes } of MODELS)
+  modelSelect.add(new Option(`${label} — 約 ${approxGigabytes}GB`, key));
+
+/** 選んだモデルを次回も使うための localStorage キー。保存できない環境（プライベートウィンドウ等）では既定に戻るだけ。 */
+const MODEL_STORAGE_KEY = 'gemma4-transcribe:model';
+
+function readSavedModelKey(): string | null {
+  try {
+    return localStorage.getItem(MODEL_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function saveModelKey(key: string): void {
+  try {
+    localStorage.setItem(MODEL_STORAGE_KEY, key);
+  } catch {
+    // 保存できなくても選択自体はこのページ内で有効なので無視する
+  }
+}
+
+/** フッターのリンクを、選択中モデルの固定 revision のページに向ける。 */
+function showSelectedModel(): void {
+  const model = findModel(modelSelect.value);
+  modelLink.href = `https://huggingface.co/${model.id}/tree/${model.revision}`;
+  modelLink.textContent = model.id;
+}
+
+modelSelect.value = findModel(readSavedModelKey()).key;
+showSelectedModel();
 
 /** 区間 ID ごとの、完了待ちと書き込み先。 */
 const pending = new Map<
@@ -60,6 +94,8 @@ function setState(next: AppState): void {
   const isIdle = state === 'idle';
   const isRecording = state === 'recording';
   loadButton.disabled = state !== 'unloaded';
+  // 録音・文字起こし中に切り替えると Worker を捨てることになるので、待機中だけ選べるようにする
+  modelSelect.disabled = !(state === 'unloaded' || isIdle);
   progressBar.hidden = state !== 'loading';
   recordButton.disabled = !(isIdle || isRecording);
   recordButton.textContent = isRecording ? '■ 録音停止' : '● 録音開始';
@@ -89,7 +125,7 @@ function handleWorkerMessage(event: MessageEvent<WorkerResponse>): void {
       workerFailure = undefined;
       setState('idle');
       setStatus(
-        `読み込み完了（${(message.elapsedMs / 1000).toFixed(1)} 秒）。録音するか音声ファイルを選んでください。`,
+        `${findModel(modelSelect.value).label} の読み込み完了（${(message.elapsedMs / 1000).toFixed(1)} 秒）。録音するか音声ファイルを選んでください。`,
       );
       return;
     }
@@ -298,7 +334,7 @@ loadButton.addEventListener('click', async () => {
   }
   progressBar.value = 0;
   setStatus('モデルを準備中…（2 回目以降はブラウザのキャッシュから読み込みます）');
-  send({ type: 'load' });
+  send({ type: 'load', modelKey: modelSelect.value });
 });
 
 recordButton.addEventListener('click', () => {
@@ -317,6 +353,17 @@ fileInput.addEventListener('change', () => {
   if (file === undefined) return;
   fileInput.value = '';
   void transcribeBlob(file);
+});
+
+modelSelect.addEventListener('change', () => {
+  saveModelKey(modelSelect.value);
+  showSelectedModel();
+  const wasLoaded = state === 'idle';
+  if (!wasLoaded) return;
+  // 1 つの Worker には 1 つのモデルだけ。GPU メモリを解放するため Worker ごと捨て、読み込みからやり直してもらう
+  discardWorker();
+  setState('unloaded');
+  setStatus('モデルを変更しました。「モデルを読み込む」を押してください。');
 });
 
 stopButton.addEventListener('click', () => {

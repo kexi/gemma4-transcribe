@@ -1,6 +1,6 @@
 /** メインスレッド → Worker のメッセージ。 */
 export type WorkerRequest =
-  | { type: 'load' }
+  | { type: 'load'; modelKey: string }
   | { type: 'transcribe'; id: number; samples: Float32Array; language: string }
   | { type: 'interrupt' };
 

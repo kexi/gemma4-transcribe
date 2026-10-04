@@ -1,21 +1,16 @@
 import {
-  AutoProcessor,
   env,
   Gemma4ForConditionalGeneration,
+  Gemma4Processor,
   InterruptableStoppingCriteria,
   TextStreamer,
   type ProgressInfo,
 } from '@huggingface/transformers';
 
+import { findModel, type ModelOption } from './models.ts';
 import { buildTranscriptionPrompt } from './prompt.ts';
 import type { WorkerRequest, WorkerResponse } from './protocol.ts';
 
-const MODEL_ID = 'onnx-community/gemma-4-E2B-it-ONNX';
-/**
- * Hugging Face 上のモデルリポジトリのコミット SHA。
- * main を追うと第三者のリポジトリ更新がそのまま全訪問者に届くため、更新はこの値を変えるコミットとしてレビューする
- */
-const MODEL_REVISION = '9f4bef82ea6e296bc69f8a2f5939f73af81b07a6';
 /** 30 秒の発話を書き起こすには十分で、暴走時に打ち切れる上限。 */
 const MAX_NEW_TOKENS = 512;
 
@@ -28,7 +23,7 @@ if (onnxWasm !== undefined) {
   };
 }
 
-type Processor = Awaited<ReturnType<typeof AutoProcessor.from_pretrained>>;
+type Processor = Awaited<ReturnType<typeof Gemma4Processor.from_pretrained>>;
 type Model = Awaited<ReturnType<typeof Gemma4ForConditionalGeneration.from_pretrained>>;
 
 let loaded: Promise<{ processor: Processor; model: Model }> | undefined;
@@ -44,7 +39,7 @@ const post = (message: WorkerResponse): void => {
 
 const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
-async function loadModel(attempt: number): Promise<{ processor: Processor; model: Model }> {
+async function loadModel(option: ModelOption, attempt: number): Promise<{ processor: Processor; model: Model }> {
   const startedAt = performance.now();
   const onProgress = (info: ProgressInfo): void => {
     const isStaleAttempt = attempt !== currentLoadAttempt;
@@ -55,11 +50,13 @@ async function loadModel(attempt: number): Promise<{ processor: Processor; model
 
   // Promise.all ではなく allSettled にするのは、片方だけ成功したときにモデル側の WebGPU セッションを解放してから失敗させるため
   const [processor, model] = await Promise.allSettled([
-    AutoProcessor.from_pretrained(MODEL_ID, { revision: MODEL_REVISION }),
-    Gemma4ForConditionalGeneration.from_pretrained(MODEL_ID, {
-      revision: MODEL_REVISION,
-      // q4f16 が WebGPU で最小（約 3.4GB）。q4 は fp32 演算になり VRAM と転送量が増えるため採らない
-      dtype: 'q4f16',
+    // AutoProcessor は preprocessor_config.json の processor_class で振り分けるが、QAT mobile 版はそこが音声特徴量の設定だけで
+    // processor_class を持たないため、tokenizer も chat template も無い汎用 Processor になる。全モデル Gemma 4 なので直接指定する
+    Gemma4Processor.from_pretrained(option.id, { revision: option.revision }),
+    Gemma4ForConditionalGeneration.from_pretrained(option.id, {
+      revision: option.revision,
+      // 型は Record<string, DataType> を要求するが、読み取り専用の対応表を書き換えることはないので展開して渡す
+      dtype: typeof option.dtype === 'string' ? option.dtype : { ...option.dtype },
       device: 'webgpu',
       progress_callback: onProgress,
     }),
@@ -111,7 +108,8 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
     case 'load': {
       if (loaded !== undefined) return;
       const attempt = ++currentLoadAttempt;
-      const attemptPromise = loadModel(attempt);
+      // 1 つの Worker には 1 つのモデルだけを載せる。切り替えは main 側が Worker ごと捨てて作り直す
+      const attemptPromise = loadModel(findModel(request.modelKey), attempt);
       loaded = attemptPromise;
       attemptPromise.catch((error: unknown) => {
         // 失敗した Promise を握り続けると再試行できないので捨て、取り残されたダウンロードの進捗も止める
