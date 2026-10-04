@@ -1,0 +1,45 @@
+# Pre-commit only. Commands that can be scoped to staged files are, so the hook
+# stays fast enough that nobody reaches for --no-verify.
+pre-commit:
+  parallel: true
+  commands:
+    gitleaks:
+      run: gitleaks git --pre-commit --staged --redact
+
+    pinact:
+      glob: '.github/workflows/*.{yml,yaml}'
+      # -fix=false -no-api is pinact's offline form: it only checks that every
+      # `uses:` is a 40-char SHA, with no GitHub API call. Resolving new SHAs
+      # is `just pin`.
+      run: pinact run -fix=false -no-api {staged_files}
+
+    actionlint:
+      glob: '.github/workflows/*.{yml,yaml}'
+      run: actionlint {staged_files}
+
+    treefmt:
+      # treefmt has no read-only mode: even --ci writes the formatted result
+      # to the working tree before failing. So format only the staged files
+      # and restage them, rather than claiming a check that silently rewrites.
+      # Why not `nix flake check`: it rebuilds the whole tree and is too slow
+      # for every commit; CI runs it through `just check`.
+      run: treefmt --no-cache {staged_files}
+      stage_fixed: true
+
+    justfile-fmt:
+      glob: 'justfile'
+      run: just --fmt --check --unstable
+
+    justfile-comments:
+      glob: 'justfile'
+      run: bash scripts/justfile-comment-lint.sh
+
+    typecheck:
+      glob: '*.ts'
+      # Whole project, not {staged_files}: a type error can surface in a file
+      # that imports the staged one.
+      run: pnpm run typecheck
+
+    oxlint:
+      glob: '*.{ts,js}'
+      run: pnpm exec oxlint {staged_files}

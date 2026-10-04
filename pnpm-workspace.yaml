@@ -1,0 +1,23 @@
+# Supply-chain guard: refuse npm packages published less than 1 day ago, so a
+# compromised release has time to be yanked before it reaches the lockfile.
+# pnpm expects minutes; 1440 = 24h, matching `pinact --min-age 1` (days).
+minimumReleaseAge: 1440
+
+# Fail the install when a dependency wants to run a lifecycle script that
+# allowBuilds does not name, rather than silently skipping it.
+strictDepBuilds: true
+
+# Detect a dependency whose trust level drops between installs.
+trustPolicy: no-downgrade
+
+# Refuse dependencies resolved from anywhere but the npm registry (git URLs,
+# tarball URLs), which bypass both minimumReleaseAge and registry auditing.
+blockExoticSubdeps: true
+
+# Explicit denials so strictDepBuilds can stay on. Both arrive through
+# @huggingface/transformers but only matter in Node: onnxruntime-node's
+# postinstall downloads native binaries, and protobufjs's only patches its own
+# CLI. The browser bundle uses onnxruntime-web, which needs no build step.
+allowBuilds:
+  onnxruntime-node: false
+  protobufjs: false

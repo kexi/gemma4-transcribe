@@ -1,0 +1,151 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f7f7f5;
+  --fg: #1d1d1b;
+  --muted: #6b6b66;
+  --card: #ffffff;
+  --line: #dcdcd6;
+  --accent: #2f6fde;
+  --danger: #c8372d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --fg: #ececea;
+    --muted: #9a9a94;
+    --card: #20201f;
+    --line: #353533;
+    --accent: #6b9cf5;
+    --danger: #f06a5f;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font:
+    15px/1.6 system-ui,
+    sans-serif;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+.lead,
+.status,
+footer {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+button,
+select,
+input[type='file']::file-selector-button {
+  font: inherit;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+input[type='file'] {
+  max-width: 100%;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+button.record {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+button.record.recording {
+  background: var(--danger);
+  color: #fff;
+}
+
+button:disabled,
+select:disabled,
+input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+progress {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
+progress[hidden] {
+  display: none;
+}
+
+audio {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.output:empty::before {
+  content: 'ここに文字起こし結果が表示されます';
+  color: var(--muted);
+}
+
+.segment {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.segment:last-child {
+  border-bottom: none;
+}
+
+.segment-time {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.segment-text {
+  white-space: pre-wrap;
+  font-size: 16px;
+}

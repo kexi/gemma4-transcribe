@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Gemma 4 E2B をブラウザ内（WebGPU）で動かして音声を文字起こしするデモ" />
+    <title>Gemma 4 文字起こし</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Gemma 4 文字起こし</h1>
+      <p class="lead">
+        Gemma 4 E2B をブラウザの WebGPU で動かします。音声はこのタブの外に送られません。 初回は約 3.4GB
+        のモデルをダウンロードし、以降はブラウザのキャッシュから読み込みます。
+      </p>
+
+      <section>
+        <button id="load" class="primary" type="button">モデルを読み込む</button>
+        <progress id="progress" max="100" value="0" hidden></progress>
+        <p id="status" class="status" role="status">デスクトップ版の Chrome / Edge 推奨（WebGPU が必要）。</p>
+      </section>
+
+      <section>
+        <div class="controls">
+          <label
+            >言語
+            <select id="language" disabled></select
+          ></label>
+          <button id="record" class="record" type="button" disabled>● 録音開始</button>
+          <input id="file" type="file" accept="audio/*,video/*" disabled />
+          <button id="stop" type="button" disabled>停止</button>
+        </div>
+        <audio id="player" controls hidden></audio>
+      </section>
+
+      <section>
+        <div id="output" class="output" aria-live="polite"></div>
+      </section>
+
+      <footer>
+        <a
+          href="https://huggingface.co/onnx-community/gemma-4-E2B-it-ONNX/tree/9f4bef82ea6e296bc69f8a2f5939f73af81b07a6"
+          >onnx-community/gemma-4-E2B-it-ONNX</a
+        >
+        ·
+        <a href="https://github.com/kexi/gemma4-transcribe">Source</a>
+      </footer>
+    </main>
+  </body>
+</html>
