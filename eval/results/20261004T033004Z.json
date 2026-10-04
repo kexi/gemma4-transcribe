@@ -1,0 +1,490 @@
+{
+  "schema": 1,
+  "run_id": "20261004T033004Z",
+  "generated_at": "2026-10-04T04:25:01+00:00",
+  "git_commit": "fcfda4765a6f539843d9de28bc4d289ae4b82d20",
+  "git_dirty": false,
+  "started_at": "2026-10-04T03:30:05+00:00",
+  "finished_at": "2026-10-04T04:20:34+00:00",
+  "language": "Japanese",
+  "environment": {
+    "chrome": "154.0.8037.97",
+    "platform": "macOS 27.0.1 (arm64)",
+    "gpu": "apple / metal-3",
+    "gpu_adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": ""
+    },
+    "machine": "Mac14,5 / Apple M2 Max"
+  },
+  "outlier_cer_norm_threshold": 1.0,
+  "outlier_ids": [
+    "cv-001017",
+    "cv-001259",
+    "cv-002144",
+    "cv-002604",
+    "cv-002796",
+    "cv-003031",
+    "cv-003072",
+    "cv-003173",
+    "cv-004031",
+    "cv-004194",
+    "cv-004482",
+    "jsut-000229",
+    "jsut-002202",
+    "jsut-002553",
+    "jsut-003352",
+    "jsut-003360",
+    "jsut-003695",
+    "jsut-004293",
+    "jsut-004333",
+    "jsut-004570",
+    "jsut-004573",
+    "jsut-004808",
+    "jsut-004840",
+    "jsut-004967",
+    "reazon-000023",
+    "reazon-000062",
+    "reazon-000238",
+    "reazon-000328",
+    "reazon-000463",
+    "reazon-000521",
+    "reazon-000668",
+    "reazon-000691",
+    "reazon-000742",
+    "reazon-001052",
+    "reazon-001181",
+    "reazon-001188",
+    "reazon-001519",
+    "reazon-001685",
+    "reazon-001772",
+    "reazon-001794",
+    "reazon-001878",
+    "reazon-001940",
+    "reazon-002093",
+    "reazon-002189",
+    "reazon-002303",
+    "reazon-002391",
+    "reazon-002409",
+    "reazon-002414",
+    "reazon-002642",
+    "reazon-002731",
+    "reazon-002999",
+    "reazon-003017",
+    "reazon-003058",
+    "reazon-003133",
+    "reazon-003315",
+    "reazon-003411",
+    "reazon-003447",
+    "reazon-003519",
+    "reazon-003527",
+    "reazon-003603",
+    "reazon-003700",
+    "reazon-003739",
+    "reazon-003747",
+    "reazon-003858",
+    "reazon-003953",
+    "reazon-004211",
+    "reazon-004345",
+    "reazon-004554",
+    "reazon-004794",
+    "reazon-005047",
+    "reazon-005051",
+    "reazon-005071"
+  ],
+  "outlier_count": 72,
+  "datasets": [
+    {
+      "key": "jsut",
+      "label": "JSUT basic5000",
+      "repo": "japanese-asr/ja_asr.jsut_basic5000",
+      "revision": "278db379fc96167ff2293d7abf9ab86976afcd78",
+      "n": 100,
+      "excluded_over_30s": 0,
+      "total_audio_s": 486.64
+    },
+    {
+      "key": "reazon",
+      "label": "ReazonSpeech test",
+      "repo": "japanese-asr/ja_asr.reazonspeech_test",
+      "revision": "dd08bfb9dfc1cef4e4d0609fd78c3755d48b926f",
+      "n": 100,
+      "excluded_over_30s": 0,
+      "total_audio_s": 581.854
+    },
+    {
+      "key": "cv",
+      "label": "Common Voice 8.0（ja）",
+      "repo": "japanese-asr/ja_asr.common_voice_8_0",
+      "revision": "bf8819e8d9a5feb51b0c718686bd20ea67a3c729",
+      "n": 100,
+      "excluded_over_30s": 0,
+      "total_audio_s": 562.716
+    }
+  ],
+  "models": [
+    {
+      "key": "e2b",
+      "label": "Gemma 4 E2B（q4f16）",
+      "id": "onnx-community/gemma-4-E2B-it-ONNX",
+      "revision": "9f4bef82ea6e296bc69f8a2f5939f73af81b07a6",
+      "dtype": "q4f16",
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 3.106,
+      "first_load_s": 4.131,
+      "first_load_downloaded": false,
+      "warmup_s": 3.229,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.199107,
+          "cer_norm": 0.151856,
+          "cer_reading": 0.085795,
+          "rtf": 0.166532,
+          "rtf_with_decode": 0.167691,
+          "audio_s": 486.642,
+          "cer_norm_median": 0.132084,
+          "cer_norm_outliers": 13,
+          "cer_norm_excluding_outliers": 0.14273
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.412495,
+          "cer_norm": 0.355904,
+          "cer_reading": 0.280244,
+          "rtf": 0.149491,
+          "rtf_with_decode": 0.150438,
+          "audio_s": 581.855,
+          "cer_norm_median": 0.312824,
+          "cer_norm_outliers": 48,
+          "cer_norm_excluding_outliers": 0.245842
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.202286,
+          "cer_norm": 0.14399,
+          "cer_reading": 0.089401,
+          "rtf": 0.135628,
+          "rtf_with_decode": 0.136809,
+          "audio_s": 562.716,
+          "cer_norm_median": 0.101282,
+          "cer_norm_outliers": 11,
+          "cer_norm_excluding_outliers": 0.122271
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 0.267899,
+        "cer_norm": 0.215364,
+        "cer_reading": 0.147814,
+        "rtf": 0.149793,
+        "rtf_with_decode": 0.150884,
+        "audio_s": 1631.213,
+        "cer_norm_median": 0.164729,
+        "cer_norm_outliers": 72,
+        "cer_norm_excluding_outliers": 0.160351
+      },
+      "worst_ids": {
+        "jsut": [
+          "jsut-004967",
+          "jsut-003697",
+          "jsut-004672"
+        ],
+        "reazon": [
+          "reazon-000023",
+          "reazon-000742",
+          "reazon-003315"
+        ],
+        "cv": [
+          "cv-000441",
+          "cv-000153",
+          "cv-001358"
+        ]
+      },
+      "failed_ids": []
+    },
+    {
+      "key": "e2b-qat",
+      "label": "Gemma 4 E2B QAT mobile（q2f16）",
+      "id": "onnx-community/gemma-4-E2B-it-qat-mobile-ONNX",
+      "revision": "5cd5514efd375abf2801c856a3936b259cc00133",
+      "dtype": {
+        "audio_encoder": "q2f16",
+        "decoder_model_merged": "q2f16",
+        "embed_tokens": "q2f16",
+        "vision_encoder": "fp16"
+      },
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 2.658,
+      "first_load_s": 2.805,
+      "first_load_downloaded": false,
+      "warmup_s": 4.354,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 1.720563,
+          "cer_norm": 1.63967,
+          "cer_reading": 1.505114,
+          "rtf": 0.52204,
+          "rtf_with_decode": 0.523467,
+          "audio_s": 486.642,
+          "cer_norm_median": 0.389956,
+          "cer_norm_outliers": 13,
+          "cer_norm_excluding_outliers": 0.424645
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 4.659682,
+          "cer_norm": 4.162263,
+          "cer_reading": 4.19451,
+          "rtf": 0.623591,
+          "rtf_with_decode": 0.62471,
+          "audio_s": 581.855,
+          "cer_norm_median": 0.699569,
+          "cer_norm_outliers": 48,
+          "cer_norm_excluding_outliers": 0.474331
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 2.079619,
+          "cer_norm": 1.840985,
+          "cer_reading": 1.949881,
+          "rtf": 0.49516,
+          "rtf_with_decode": 0.496439,
+          "audio_s": 562.716,
+          "cer_norm_median": 0.263158,
+          "cer_norm_outliers": 11,
+          "cer_norm_excluding_outliers": 0.307618
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 2.770055,
+        "cer_norm": 2.520374,
+        "cer_reading": 2.48663,
+        "rtf": 0.548991,
+        "rtf_with_decode": 0.550257,
+        "audio_s": 1631.213,
+        "cer_norm_median": 0.416667,
+        "cer_norm_outliers": 72,
+        "cer_norm_excluding_outliers": 0.394386
+      },
+      "worst_ids": {
+        "jsut": [
+          "jsut-004967",
+          "jsut-004808",
+          "jsut-002553"
+        ],
+        "reazon": [
+          "reazon-001794",
+          "reazon-002303",
+          "reazon-000463"
+        ],
+        "cv": [
+          "cv-001259",
+          "cv-001017",
+          "cv-003031"
+        ]
+      },
+      "failed_ids": []
+    },
+    {
+      "key": "e4b",
+      "label": "Gemma 4 E4B（q4f16）",
+      "id": "onnx-community/gemma-4-E4B-it-ONNX",
+      "revision": "843f250f23bc91754def1e0f0db390dacd1e6b05",
+      "dtype": "q4f16",
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 3.817,
+      "first_load_s": 3.47,
+      "first_load_downloaded": false,
+      "warmup_s": 7.062,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.164435,
+          "cer_norm": 0.123735,
+          "cer_reading": 0.06875,
+          "rtf": 0.409636,
+          "rtf_with_decode": 0.410826,
+          "audio_s": 486.642,
+          "cer_norm_median": 0.09233,
+          "cer_norm_outliers": 13,
+          "cer_norm_excluding_outliers": 0.119681
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.528133,
+          "cer_norm": 0.462015,
+          "cer_reading": 0.398509,
+          "rtf": 0.37285,
+          "rtf_with_decode": 0.373741,
+          "audio_s": 581.855,
+          "cer_norm_median": 0.302893,
+          "cer_norm_outliers": 48,
+          "cer_norm_excluding_outliers": 0.227043
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 0.173333,
+          "cer_norm": 0.128548,
+          "cer_reading": 0.085676,
+          "rtf": 0.330193,
+          "rtf_with_decode": 0.33104,
+          "audio_s": 562.716,
+          "cer_norm_median": 0.075499,
+          "cer_norm_outliers": 11,
+          "cer_norm_excluding_outliers": 0.110141
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 0.28281,
+        "cer_norm": 0.234736,
+        "cer_reading": 0.177313,
+        "rtf": 0.369109,
+        "rtf_with_decode": 0.370074,
+        "audio_s": 1631.213,
+        "cer_norm_median": 0.12633,
+        "cer_norm_outliers": 72,
+        "cer_norm_excluding_outliers": 0.142281
+      },
+      "worst_ids": {
+        "jsut": [
+          "jsut-004967",
+          "jsut-002357",
+          "jsut-003697"
+        ],
+        "reazon": [
+          "reazon-002731",
+          "reazon-000023",
+          "reazon-000742"
+        ],
+        "cv": [
+          "cv-001358",
+          "cv-002279",
+          "cv-004194"
+        ]
+      },
+      "failed_ids": []
+    },
+    {
+      "key": "e4b-qat",
+      "label": "Gemma 4 E4B QAT mobile（q2f16）",
+      "id": "onnx-community/gemma-4-E4B-it-qat-mobile-ONNX",
+      "revision": "4d18aa8b54e354bec4705e4a4894f5bbf8956c3d",
+      "dtype": {
+        "audio_encoder": "q2f16",
+        "decoder_model_merged": "q2f16",
+        "embed_tokens": "q2f16",
+        "vision_encoder": "fp16"
+      },
+      "status": "done",
+      "planned": 300,
+      "missing": 0,
+      "load_s": 2.92,
+      "first_load_s": 3.154,
+      "first_load_downloaded": false,
+      "warmup_s": 2.738,
+      "per_dataset": {
+        "jsut": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 1.466529,
+          "cer_norm": 1.339333,
+          "cer_reading": 1.108807,
+          "rtf": 0.66105,
+          "rtf_with_decode": 0.662036,
+          "audio_s": 486.642,
+          "cer_norm_median": 0.25,
+          "cer_norm_outliers": 13,
+          "cer_norm_excluding_outliers": 0.277039
+        },
+        "reazon": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 4.426853,
+          "cer_norm": 3.483485,
+          "cer_reading": 3.128092,
+          "rtf": 1.004634,
+          "rtf_with_decode": 1.005482,
+          "audio_s": 581.855,
+          "cer_norm_median": 0.786041,
+          "cer_norm_outliers": 48,
+          "cer_norm_excluding_outliers": 0.387563
+        },
+        "cv": {
+          "n": 100,
+          "failed": 0,
+          "cer_strict": 1.449905,
+          "cer_norm": 1.050083,
+          "cer_reading": 0.979343,
+          "rtf": 0.571457,
+          "rtf_with_decode": 0.572432,
+          "audio_s": 562.716,
+          "cer_norm_median": 0.175192,
+          "cer_norm_outliers": 11,
+          "cer_norm_excluding_outliers": 0.227074
+        }
+      },
+      "overall": {
+        "n": 300,
+        "failed": 0,
+        "cer_strict": 2.401232,
+        "cer_norm": 1.940548,
+        "cer_reading": 1.700552,
+        "rtf": 0.7527,
+        "rtf_with_decode": 0.753633,
+        "audio_s": 1631.213,
+        "cer_norm_median": 0.293309,
+        "cer_norm_outliers": 72,
+        "cer_norm_excluding_outliers": 0.285789
+      },
+      "worst_ids": {
+        "jsut": [
+          "jsut-004333",
+          "jsut-002202",
+          "jsut-004570"
+        ],
+        "reazon": [
+          "reazon-000023",
+          "reazon-000328",
+          "reazon-003447"
+        ],
+        "cv": [
+          "cv-002144",
+          "cv-002604",
+          "cv-003072"
+        ]
+      },
+      "failed_ids": []
+    }
+  ],
+  "notes": [
+    "失敗したクリップ（タイムアウトや WebGPU のエラーなど）は CER と RTF から除き、失敗数として別に数えています",
+    "外れ値（どれか 1 つのモデルでクリップ単位の CER（正規化）が 100% を超えたクリップ）を除いた CER は感度を見るための参考値です。外れ値は全モデル共通で、どのモデルからも同じクリップを除いています。結論や最良値の判定は、すべてのクリップを含む CER で行っています",
+    "ReazonSpeech には参照テキストが音声の一部しか書き起こしていないクリップがあり、正しく聞き取っても CER が 100% を超えることがあります",
+    "ウォームアップには先頭のクリップを使い、その時間は RTF に含めていません",
+    "初回の読み込み時間がダウンロードを含むのは、その読み込みでダウンロードが起きたと記録されているときだけです"
+  ]
+}
