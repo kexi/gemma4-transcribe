@@ -67,7 +67,7 @@ pin:
 
 # Offline: verify every `uses:` is a 40-char SHA without calling the GitHub API.
 pin-check:
-    pinact run -fix=false -no-api .github/workflows/*.yml
+    pinact run --fix=false --no-api .github/workflows/*.yml
 
 # eval-run is left out on purpose: it needs a GPU and a real Chrome window.
 # Every gate a change has to clear. CI runs exactly this recipe.
