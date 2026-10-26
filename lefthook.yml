@@ -8,10 +8,10 @@ pre-commit:
 
     pinact:
       glob: '.github/workflows/*.{yml,yaml}'
-      # -fix=false -no-api is pinact's offline form: it only checks that every
+      # --fix=false --no-api is pinact's offline form: it only checks that every
       # `uses:` is a 40-char SHA, with no GitHub API call. Resolving new SHAs
       # is `just pin`.
-      run: pinact run -fix=false -no-api {staged_files}
+      run: pinact run --fix=false --no-api {staged_files}
 
     actionlint:
       glob: '.github/workflows/*.{yml,yaml}'
